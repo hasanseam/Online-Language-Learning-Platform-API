@@ -1,6 +1,7 @@
 package com.hasanur.learneinbisschengerman.course;
 
 import com.hasanur.learneinbisschengerman.course.Dtos.CourseCreateDto;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,7 +17,7 @@ public class CourseController {
     }
 
     @PostMapping
-    public Course createCourse(@RequestBody CourseCreateDto courseCreateDto) {
+    public Course createCourse(@Valid @RequestBody CourseCreateDto courseCreateDto) {
         return this.courseService.createCourse(courseCreateDto);
     }
 
