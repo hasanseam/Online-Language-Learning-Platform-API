@@ -86,5 +86,8 @@ public class Lesson {
     public void setOrderNumber(Integer orderNumber) {
         this.orderNumber = orderNumber;
     }
+
+    public static interface LessonRepository {
+    }
 }
 

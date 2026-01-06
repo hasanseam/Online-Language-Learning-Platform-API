@@ -2,6 +2,7 @@ package com.hasanur.learneinbisschengerman.course;
 
 import com.hasanur.learneinbisschengerman.lesson.Lesson;
 import jakarta.persistence.*;
+import org.springframework.web.ErrorResponse;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +42,7 @@ public class Course {
         this.title = title;
         this.level = level;
     }
+
 
     public Long getId() {
         return id;

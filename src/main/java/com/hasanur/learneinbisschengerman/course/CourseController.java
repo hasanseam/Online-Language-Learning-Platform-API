@@ -1,7 +1,11 @@
 package com.hasanur.learneinbisschengerman.course;
 
 import com.hasanur.learneinbisschengerman.course.Dtos.CourseCreateDto;
+import com.hasanur.learneinbisschengerman.course.Dtos.CourseResponseDto;
+import com.hasanur.learneinbisschengerman.exceptions.ResourceNotFoundException;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -10,19 +14,50 @@ import java.util.List;
 @RequestMapping("/courses")
 public class CourseController {
 
+
     private final CourseService courseService;
 
     public CourseController(CourseService courseService) {
         this.courseService = courseService;
     }
 
+    // CREATE
     @PostMapping
-    public Course createCourse(@Valid @RequestBody CourseCreateDto courseCreateDto) {
-        return this.courseService.createCourse(courseCreateDto);
+    public ResponseEntity<CourseResponseDto> createCourse(@Valid @RequestBody CourseCreateDto dto) {
+        CourseResponseDto course = courseService.createCourse(dto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(course);
     }
 
+    // READ ALL
     @GetMapping
-    public List<Course> getAllCourse() {
-        return courseService.getCourses();
+    public ResponseEntity<List<CourseResponseDto>> getAllCourses() {
+        List<CourseResponseDto> courses = courseService.getCourses();
+        return ResponseEntity.ok(courses);
     }
+
+    // READ ONE
+    @GetMapping("/{courseId}")
+    public ResponseEntity<CourseResponseDto> getCourseById(@PathVariable Long courseId) {
+        CourseResponseDto course = courseService.getCourseById(courseId)
+                .orElseThrow(() -> new ResourceNotFoundException("Course not found"));
+        return ResponseEntity.ok(course);
+    }
+
+    // UPDATE
+    @PutMapping("/{courseId}")
+    public ResponseEntity<CourseResponseDto> updateCourse(
+            @PathVariable Long courseId,
+            @Valid @RequestBody CourseCreateDto dto
+    ) {
+        CourseResponseDto updated = courseService.updateCourse(courseId, dto);
+        return ResponseEntity.ok(updated);
+    }
+
+    // DELETE
+    @DeleteMapping("/{courseId}")
+    public ResponseEntity<Void> deleteCourse(@PathVariable Long courseId) {
+        courseService.deleteCourse(courseId);
+        return ResponseEntity.noContent().build(); // 204 No Content
+    }
+
 }
